@@ -1,0 +1,30 @@
+name: Windows Virtual PC
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows-pc:
+    runs-on: windows-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Informacoes do PC
+        shell: powershell
+        run: |
+          Write-Host "=== WINDOWS ==="
+          Get-ComputerInfo |
+            Select-Object WindowsProductName, WindowsVersion,
+                          OsArchitecture
+
+          Write-Host "=== PROCESSADOR ==="
+          Get-CimInstance Win32_Processor |
+            Select-Object Name, NumberOfCores,
+                          NumberOfLogicalProcessors
+
+          Write-Host "=== MEMORIA ==="
+          Get-CimInstance Win32_ComputerSystem |
+            Select-Object TotalPhysicalMemory
+
+          Write-Host "=== DISCOS ==="
+          Get-PSDrive -PSProvider FileSystem
